@@ -34,6 +34,10 @@ void loop() {
   bPIR = digitalRead(PIN_PIR); 
  
   // send the PIR signal directly to the LED 
-  // but invert it because true = LED off! 
-  digitalWrite(LED_BUILTIN, !bPIR); 
+  // but invert it because true = LED off!
+  if(bPIR){
+    digitalWrite(LED_BUILTIN, false);
+    delay(10000);
+    digitalWrite(LED_BUILTIN, true);
+  }
 }
