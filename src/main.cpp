@@ -32,7 +32,7 @@
 #define LED_OFF true
 
 // The value of the button when it is pressed
-#define BUTTON_PUSHED_STATE 0
+#define BUTTON_PUSHED_STATE false
 
 // The value of the aalarm system state when it is disabled
 #define ALARM_DISABLED  0
@@ -61,11 +61,11 @@
 // Holds the current state of the alarm system
 int iAlarmState;
 // Holds the current value of the alarm countdown timer
-int alarmCountdownTimer;
+int iAlarmCountdownTimer;
 // The state of the PIR sensor on the last loop
-bool lastPIRState;
+bool bLastPIRState;
 // The state of the PIR sensor on this loop
-bool currentPIRState; 
+bool bCurrentPIRState; 
 
 // *********************************************************** 
 // Reads the input for both the PIR sensor and the button. The input of the button will be used
@@ -74,17 +74,17 @@ bool currentPIRState;
 void collectInputs(){
   // The PIR sensor will hold its output for about 2.5 seconds after it is detects motion.
   // The state is held here to help make the alarm system more stable after it detects motion. 
-  lastPIRState = currentPIRState;
-  currentPIRState = digitalRead(PIN_PIR);
+  bLastPIRState = bCurrentPIRState;
+  bCurrentPIRState = digitalRead(PIN_PIR);
   
-  int buttonState = digitalRead(PIN_BUTTON);
+  bool bButtonState = digitalRead(PIN_BUTTON);
 
-  if(buttonState == BUTTON_PUSHED_STATE && (iAlarmState != ALARM_ACTIVE && iAlarmState != ALARM_ENABLE)){
+  if(bButtonState == BUTTON_PUSHED_STATE && (iAlarmState != ALARM_ACTIVE && iAlarmState != ALARM_ENABLE)){
     if(iAlarmState == ALARM_COUNTDOWN) {
       iAlarmState = ALARM_DISABLED;
     } else if(iAlarmState == ALARM_DISABLED){
       iAlarmState = ALARM_ENABLE;
-      alarmCountdownTimer = ALARM_COUNTDOWN_TIME;
+      iAlarmCountdownTimer = ALARM_COUNTDOWN_TIME;
     }
     digitalWrite(LED_BUILTIN, LED_OFF);
     delay(BUTTON_DELAY);
@@ -97,8 +97,8 @@ void collectInputs(){
 // 
 // @param delayTime The time in milliseconds to delay the system
 // 
-void collectInputsWithDelay(int delayTime){
-  for(int i=0; i<delayTime; i++) {
+void collectInputsWithDelay(int iDelayTime){
+  for(int i=0; i<iDelayTime; i++) {
     collectInputs();
     delay(1);
   }
@@ -113,18 +113,18 @@ void collectInputsWithDelay(int delayTime){
 // and must be enabled by pressing the button. 
 // 
 void checkAlarmState(){
-  if(iAlarmState == ALARM_ENABLE && (lastPIRState == LOW && currentPIRState == HIGH)) {
+  if(iAlarmState == ALARM_ENABLE && (bLastPIRState == LOW && bCurrentPIRState == HIGH)) {
     iAlarmState = ALARM_COUNTDOWN;
   } else if(iAlarmState == ALARM_COUNTDOWN){
     // Blinks the LED 4 times a second
     // The function collectInputsWithDelay() helps make the button
     // feel more responsive
-    alarmCountdownTimer--;
+    iAlarmCountdownTimer--;
     digitalWrite(LED_BUILTIN, LED_ON);
     collectInputsWithDelay(LED_ON_TIME_DELAY);
     digitalWrite(LED_BUILTIN, LED_OFF);
     collectInputsWithDelay(LED_OFF_TIME_DELAY);
-    if(alarmCountdownTimer <= 0){
+    if(iAlarmCountdownTimer <= 0){
       iAlarmState = ALARM_ACTIVE;
     }    
   } else if(iAlarmState == ALARM_ACTIVE) {
@@ -145,10 +145,10 @@ void setup() {
   pinMode(PIN_BUTTON, INPUT_PULLUP);
 
   // Initialized the alarm variables
-  lastPIRState = 0;
-  currentPIRState = 0;
+  bLastPIRState = 0;
+  bCurrentPIRState = 0;
   iAlarmState = ALARM_ENABLE;
-  alarmCountdownTimer = ALARM_COUNTDOWN_TIME;
+  iAlarmCountdownTimer = ALARM_COUNTDOWN_TIME;
   digitalWrite(LED_BUILTIN, LED_OFF);
 } 
  
