@@ -97,7 +97,7 @@ void collectInputs(){
 // 
 // @param delayTime The time in milliseconds to delay the system
 // 
-void collectInputsWithDelay(int iDelayTime){
+void delayAndCollectInputs(int iDelayTime){
   for(int i=0; i<iDelayTime; i++) {
     collectInputs();
     delay(1);
@@ -117,13 +117,13 @@ void checkAlarmState(){
     iAlarmState = ALARM_COUNTDOWN;
   } else if(iAlarmState == ALARM_COUNTDOWN){
     // Blinks the LED 4 times a second
-    // The function collectInputsWithDelay() helps make the button
+    // The function delayAndCollectInputs() helps make the button
     // feel more responsive
     iAlarmCountdownTimer--;
     digitalWrite(LED_BUILTIN, LED_ON);
-    collectInputsWithDelay(LED_ON_TIME_DELAY);
+    delayAndCollectInputs(LED_ON_TIME_DELAY);
     digitalWrite(LED_BUILTIN, LED_OFF);
-    collectInputsWithDelay(LED_OFF_TIME_DELAY);
+    delayAndCollectInputs(LED_OFF_TIME_DELAY);
     if(iAlarmCountdownTimer <= 0){
       iAlarmState = ALARM_ACTIVE;
     }    
