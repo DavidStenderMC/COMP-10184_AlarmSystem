@@ -137,9 +137,6 @@ void checkAlarmState(){
  
 // ************************************************************* 
 void setup() { 
-  // configure the USB serial monitor 
-  Serial.begin(115200); 
- 
   // configure the LED output 
   pinMode(LED_BUILTIN, OUTPUT); 
   // PIR sensor is an INPUT 
