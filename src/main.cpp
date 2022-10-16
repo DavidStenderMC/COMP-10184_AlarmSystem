@@ -99,7 +99,7 @@ void collectInputs(){
 
 // *********************************************************** 
 // Helps make the system more responsive then when using a normal delay. Wakes the device up
-// every millisecond to check if any input has happened.
+// every 10 milliseconds to check if any input has happened.
 // 
 // @param delayTime The time in milliseconds to delay the system
 // 
