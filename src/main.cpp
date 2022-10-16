@@ -58,8 +58,11 @@
 // The delay in milliseconds to wait after turning off the LED (for blinking the alarm during its countdown)
 #define LED_OFF_TIME_DELAY 200
 
-// One millisecond for using with the delay() function
-#define ONE_MILLISECOND 1
+// Ten millisecond for using with the delay() function
+#define TEN_MILLISECONDS 10
+
+// The integer ten
+#define TEN 10
 
 // Holds the current state of the alarm system
 int iAlarmState;
@@ -101,9 +104,9 @@ void collectInputs(){
 // @param delayTime The time in milliseconds to delay the system
 // 
 void delayAndCollectInputs(int iDelayTime){
-  for(int i=0; i<iDelayTime; i++) {
+  for(int i=0; i<iDelayTime; i+=TEN) {
     collectInputs();
-    delay(ONE_MILLISECOND);
+    delay(TEN_MILLISECONDS);
   }
 }
 
